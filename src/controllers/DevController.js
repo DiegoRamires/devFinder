@@ -1,6 +1,8 @@
 import Dev from '../models/Dev';
 import API from '../utils/apiUrl';
 
+import parseStringAsArray from '../utils/parseStringAsArray';
+
 export default {
   async store(req, res) {
     const { github_username, techs, latitude, longitude } = req.body;
@@ -12,7 +14,7 @@ export default {
 
       const { name = login, avatar_url, bio } = API_response.data;
 
-      const techsArray = techs.split(',').map(tech => tech.trim());
+      const techsArray = parseStringAsArray(techs);
 
       const location = {
         type: 'Point',
