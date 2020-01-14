@@ -1,5 +1,4 @@
 import Dev from '../models/Dev';
-
 import API from '../utils/apiUrl';
 
 export default {
@@ -32,5 +31,10 @@ export default {
     }
 
     return res.status(422).send('User already exists');
+  },
+
+  async index(req, res) {
+    const devs = await Dev.find();
+    return res.json(devs);
   },
 };
