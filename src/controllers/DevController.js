@@ -6,26 +6,31 @@ export default {
   async store(req, res) {
     const { github_username, techs, latitude, longitude } = req.body;
 
-    const API_response = await API.get(`${github_username}`);
+    let dev = await Dev.findOne({ github_username });
 
-    const { name = login, avatar_url, bio } = API_response.data;
+    if (!dev) {
+      const API_response = await API.get(`${github_username}`);
 
-    const techsArray = techs.split(',').map(tech => tech.trim());
+      const { name = login, avatar_url, bio } = API_response.data;
 
-    const location = {
-      type: 'Point',
-      coordinates: [longitude, latitude],
-    };
+      const techsArray = techs.split(',').map(tech => tech.trim());
 
-    const dev = await Dev.create({
-      github_username,
-      name,
-      avatar_url,
-      bio,
-      techs: techsArray,
-      location,
-    });
+      const location = {
+        type: 'Point',
+        coordinates: [longitude, latitude],
+      };
 
-    return res.json(dev);
+      dev = await Dev.create({
+        github_username,
+        name,
+        avatar_url,
+        bio,
+        techs: techsArray,
+        location,
+      });
+      return res.json(dev);
+    }
+
+    return res.status(422).send('User already exists');
   },
 };
