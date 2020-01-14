@@ -1,11 +1,19 @@
 const express = require("express");
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+require("dotenv/config");
 
 const app = express();
+mongoose.connect(`${process.env.MongoDB}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
+app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
+app.post("/", (req, res) => {
+  console.log(req.body);
   return res.json({ message: "Hello world" });
 });
 
