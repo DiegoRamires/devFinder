@@ -39,4 +39,19 @@ export default {
     const devs = await Dev.find();
     return res.json(devs);
   },
+
+  async destroy(req, res) {
+    const { github_username } = req.body;
+    const dev = await Dev.findOne({ github_username });
+
+    if (!dev) {
+      return res.status(422).json({ error: 'Dev does not exists!' });
+    }
+
+    if (dev) {
+      await Dev.deleteOne({ github_username });
+    }
+
+    return res.send();
+  },
 };

@@ -9,6 +9,7 @@ const app = express();
 mongoose.connect(`${process.env.MongoDB}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 app.use(morgan('dev'));
