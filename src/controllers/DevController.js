@@ -2,6 +2,7 @@ import Dev from '../models/Dev';
 import API from '../utils/apiUrl';
 
 import parseStringAsArray from '../utils/parseStringAsArray';
+import { findConnections, sendMessage } from '../websocket';
 
 export default {
   async store(req, res) {
@@ -29,6 +30,13 @@ export default {
         techs: techsArray,
         location,
       });
+
+      const sendSocketMessageTo = findConnections(
+        { latitude, longitude },
+        techsArray
+      );
+      sendMessage(sendSocketMessageTo, 'new-dev', dev);
+
       return res.json(dev);
     }
 
